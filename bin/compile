@@ -39,6 +39,13 @@ curl --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common --st
 
 #create the cache dir if it doesn't exist
 mkdir -p $CACHE_DIR
+for DIR in $CACHED_DIRS ; do
+  rm -rf $CACHE_DIR/$DIR
+  mkdir -p $CACHE_DIR/$DIR
+  cp -r $DIR/.  $CACHE_DIR/$DIR
+echo "-----> Dropping ivy cache from the slug: $DIR"
+rm -rf $SBT_USER_HOME/.ivy2
+done
 
 # install JDK
 javaVersion=$(detect_java_version ${BUILD_DIR})
